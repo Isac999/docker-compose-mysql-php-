@@ -1,0 +1,47 @@
+version: "3.7"
+
+services:
+
+  phpmyadm:
+    image: phpmyadmin/phpmyadmin
+    container_name:
+      "php"
+    ports:
+      ["8081:80"]
+    environment:
+        PMA_HOST: db
+        PMA_PORT: 3306
+        PMA_ARBITRARY: 1
+    volumes:
+      - "./php:/var/php/html"
+    networks:
+      - conexao
+
+  db:
+    build: 
+      "./mysql"
+    container_name: 
+      "db"
+    ports:
+      ["3306:3306"]
+    environment:
+      MYSQL_ROOT_PASSWORD: " "
+      MYSQL_DATABASE: "teste"
+      MYSQL_USER: "isac"
+      MYSQL_PASSWORD: " "
+    volumes:
+      - "./mysql/data:/var/lib/mysql"
+    networks:
+      - conexao
+
+  python:
+    build:
+      "./python"
+    container_name: 
+      "py"
+    command: 
+      sh -c "python -i index.py"
+
+networks:
+  conexao:
+    driver: bridge
